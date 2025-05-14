@@ -8,12 +8,12 @@ export class Producto {
     @Column( { length: 50})
     Nombre: string;
 
-    @Column( { default: () => 1 } )
+    @Column({ type: 'int', default: 1 }) 
     Precio: number;
-    
-    @Column( { default: () => 0 } )
+
+    @Column({ type: 'int', default: 0 }) 
     Stock: number;
 
-    @Column( { default: () => false } )
+    @Column({ type: 'boolean', default: true }) 
     Activo: boolean;
 }
