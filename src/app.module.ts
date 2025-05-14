@@ -4,7 +4,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Producto } from './entities/producto.entity';
 import { ProductModule } from './product/product.module';
+import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthUserEntity } from './entities/auth-user.entity';
 
 @Module({
   imports: [
@@ -20,12 +22,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Producto],
+      entities: [Producto, AuthUserEntity],
       synchronize: true,
     }),
 
-    ProductModule],
+    ProductModule,
+    AuthModule,
+
+    ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+    static initialize() {
+        throw new Error('Method not implemented.');
+    }
+}

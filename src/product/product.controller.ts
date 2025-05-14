@@ -16,12 +16,14 @@ import { ProductService } from './product.service';
 import { AddProductDto } from 'src/DTOs/add-product.dto';
 import { UpdateProductDto } from 'src/DTOs/update-product.dto';
 import { Producto } from '../entities/producto.entity';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuardGuard } from 'src/guard/jwt-auth-guard.guard';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  // Crear un nuevo producto
+  @UseGuards(JwtAuthGuardGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async addProduct(@Body() addProductDto: AddProductDto): Promise<Producto> {
@@ -35,7 +37,6 @@ export class ProductController {
     }
   }
 
-  // Obtener todos los productos activos con paginación
   @Get()
   async findAll(
     @Query('page') page: number = 1,
@@ -48,7 +49,6 @@ export class ProductController {
     }
   }
 
-  // Obtener un producto por SKU
   @Get(':sku')
   async findOne(@Param('sku', ParseUUIDPipe) sku: string): Promise<Producto> {
     try {
@@ -61,7 +61,7 @@ export class ProductController {
     }
   }
 
-  // Actualizar un producto por SKU
+  @UseGuards(JwtAuthGuardGuard)
   @Patch(':sku')
   @HttpCode(HttpStatus.NO_CONTENT)
   async update(
@@ -78,7 +78,7 @@ export class ProductController {
     }
   }
 
-  // Eliminar (desactivar) un producto por SKU
+  @UseGuards(JwtAuthGuardGuard)
   @Delete(':sku')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('sku', ParseUUIDPipe) sku: string): Promise<void> {
